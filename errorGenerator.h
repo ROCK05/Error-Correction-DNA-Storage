@@ -10,6 +10,7 @@ void error(ifstream &encodedFile, double errorRate)
     ofstream erroredFile("ErroredFile.txt",ios::out | ios::trunc);
     int errorCount = 0;
     int totalChar = 0;
+    int inError = 0, subError = 0, delError = 0;
     if(erroredFile.is_open())
     {
         while(!encodedFile.eof())
@@ -26,7 +27,7 @@ void error(ifstream &encodedFile, double errorRate)
                     if(encodedFile.eof())
                     break;
                     totalChar++;
-                    if(rand() % 50 == 0 and temp)// and numOfErrorInBase)
+                    if(rand() % 100 == 0 and temp)// and numOfErrorInBase)
                     {
                         //cout << "HELLO";
                         //Generate type of error 
@@ -47,16 +48,19 @@ void error(ifstream &encodedFile, double errorRate)
 
                             char subChar = str[rand() % 3];
                             erroredFile << subChar;
+                            subError++;
                         }
                         else if(num == 2) //Insertion
                         {
                             string str = "ACGT";
                             erroredFile << str[rand() % 4];
                             erroredFile << c;
+                            inError++;
                         }
                         else //Deletion
                         {
                             //No need to write char to erroredFile
+                            delError++;
                         }
                         temp--;
                         //numOfErrorInBase--;
@@ -73,6 +77,9 @@ void error(ifstream &encodedFile, double errorRate)
     }
     
     erroredFile.close();
-    cout << totalChar << " " << errorCount;
+    cout << totalChar << " " << errorCount <<endl;
+    cout << "InsertionError " << inError<<endl;
+    cout << "DeletionError " << delError << endl;
+    cout << "SubError " << subError <<endl;
 
 }

@@ -12,7 +12,7 @@ string getCode(char ch)
     else if(ch >= 'a' and ch <= 'z') //Lower case
         ans = book[ch];
     else if(ch == ' ') //Space
-        ans = book['S'];
+        ans = book[' '];
     else //Punctuation
         ans = book['P'] + book[ch];
     
@@ -37,7 +37,10 @@ void encoding(ifstream &input)
 
             //Add enter string code if it is not end of file
             if(!input.eof())
-            encodedfile << book['E'];
+            {
+                encodedfile << book['P'];
+                encodedfile << book['E'];
+            }
         }
     }
     encodedfile.close();

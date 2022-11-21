@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-vector<pair<char,string>> ch = {
+vector<pair<char,string>> chr = {
 {'a',"TAACCG"},{'p',"TAAGGC"},{'e',"ATCACG"},
 {'y',"ATGAGC"},{'g',"ATGGAG"},{'k',"TACCAC"},
 {'b',"ATCCGT"},{'v',"ATGCCA"},{'r',"TAGCGA"},
@@ -9,14 +9,15 @@ vector<pair<char,string>> ch = {
 {'j',"TCAGAG"},{'x',"ACAGGT"},{'f',"ACTGCA"},
 {'s',"AGACCT"},{'h',"TCTCGT"},{'c',"TCGAAC"},
 {'o',"ACGACT"},{'z',"CATTCG"},{'q',"CTACAG"},
-{'d',"CAACGT"},{'u',"CAGACA"}};
+{'d',"CAACGT"},{'u',"CAGACA"}
+};
 
 vector<pair<char,string>> pun = {
 {'@',"TAACCG"},{')',"TAAGGC"},{'.',"ATCACG"},
 {',',"ATGAGC"},{'*',"ATGGAG"},{'/',"TACCAC"},
 {'(',"ATCCGT"},{':',"ATGCCA"},{39,"TAGCGA"},
 {'[',"TAGGCT"},{';',"ACATCG"},{']',"ACTTGC"},
-{'}',"ACACAC"},{'"',"ACTCTG"},
+{'}',"ACACAC"},{'"',"ACTCTG"},{'E',"TCTACG"}, //Enter
 {'%',"TCAGAG"},{'{',"ACAGGT"},{'~',"ACTGCA"},
 {'+',"AGACCT"},{'-',"TCTCGT"},{'?',"TCGAAC"},
 {'!',"ACGACT"},{'&',"CATTCG"},{'=',"CTACAG"},
@@ -31,20 +32,19 @@ vector<pair<char,string>> digit = {
 };
 
 vector<pair<char,string>> shadow = {
-    {'E', "TCTACG"}, //Enter
     {'U', "TGCATA"}, //Upper case
     {'D', "CTTGTC"}, //Digit 
     {'P', "GTATGA"}, //Punctuation
-    {'S', "CGGTAT"}  //Space
+    {' ', "CGGTAT"}  //Space
 };
 
 unordered_map<char, string> book;
 
 void setCodebook()
 {
-    for(int i = 0; i < ch.size(); i++)
+    for(int i = 0; i < chr.size(); i++)
     {
-        book[ch[i].first] = ch[i].second;
+        book[chr[i].first] = chr[i].second;
     }
 
     for(int i = 0; i < pun.size(); i++)

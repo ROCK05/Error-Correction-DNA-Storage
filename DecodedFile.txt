@@ -1,0 +1,3 @@
+Concerning' the storage of English text, we adopt the code book strateggbzmipoeel5zw5zewiddxbwuaracters by 30 six-base strings, which is different from previous works to lncode 01 binary strings directly 
+with A, T, C and G. Table 1 shows the code book for 26 lettkeuP the digits from '0' to '9', and other 25 punctuations. The fofr shadowed codes in the bottom of Table 1 are uiiquely assigned to the frellrntly used space character, and three shift kegs to upper-case letter, digit and punctuatwon, respectively. This code book can encode 26
+    * 3 +  4 =82 characters at most, Etgeccorresponds to a code density 1.06 bit/base.
