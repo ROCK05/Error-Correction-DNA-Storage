@@ -24,24 +24,68 @@ string getCode(char ch)
 void encoding(ifstream &input)
 {
     ofstream encodedfile("Encodedfile.txt",ios::out | ios::trunc);
+    //ofstream encodedfileTemp("EncodedfileTemp.txt",ios::out | ios::trunc);
+
     char c;
+    int totalCharInInput = 0;
     if(encodedfile.is_open())
     {
         string line;
+        string str = "";
         while(getline(input,line))
         {
+            int i;
             for(int i = 0; i < line.size(); i++)
             {
-                encodedfile << getCode(line[i]);
+                str += getCode(line[i]);
+                if(str.size() >= 180)
+                {
+                    encodedfile << str.substr(0,180);
+                    encodedfile << endl;
+                    if(str.size() > 180)
+                    str = str.substr(180);
+                    else
+                    str = "";
+                }
+                //encodedfileTemp << getCode(line[i]);
+                totalCharInInput++;
             }
-
+            // if(str.size() == 180)
+            // {
+            //     encodedfile << str <<endl;
+            //     str = "";
+            // }
             //Add enter string code if it is not end of file
             if(!input.eof())
             {
-                encodedfile << book['P'];
-                encodedfile << book['E'];
+                if(input.eof())
+                break;
+                str += book['P'];
+                if(str.size() == 180)
+                {
+                    encodedfile << str;
+                    encodedfile <<endl;
+                    str = "";
+                }
+                str += book['E'];
+                if(str.size() == 180)
+                {
+                    encodedfile << str;
+                    encodedfile << endl;
+                    str = "";
+                }
+                // encodedfileTemp << book['P'];
+                // encodedfileTemp << book['E'];
             }
         }
+
+        if(str.size() != 0)
+        {
+        encodedfile << str;
+        str = "";
+        }
     }
+
+    //cout << "Total characters in Input: " << totalCharInInput<<endl;
     encodedfile.close();
 }

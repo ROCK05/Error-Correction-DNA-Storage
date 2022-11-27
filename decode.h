@@ -179,24 +179,28 @@ char correctError(string slice, string errortype, char shift)
     return decodedChar;
 }
 
-void decoding(ifstream &input)
+string decoding(string &input, char &shift)
 {
-    ofstream decodedFile("DecodedFile.txt",ios::out | ios::trunc);
-    if(decodedFile.is_open())
+    string answer = "";
+
+   // ofstream decodedFile("DecodedFile.txt",ios::out | ios::trunc);
+    //if(decodedFile.is_open())
     {
         //reading first k=10 slices
         string slices = "";
         int k = 10;
         char c;
-        for(int i = 0; i < 6*k and !input.eof(); i++)
+        int index = 0;
+        for(int i = 0; i < 6*k and index < input.size(); i++)
         {
-            input.get(c);
-            if(input.eof()) break;
+            c = input[index++];
+            //input.get(c);
+            //if(input.eof()) break;
             slices.push_back(c);
         }
         //cout << slices << " ";
 
-        char shift = 'G';
+        //char shift = 'G';
         while(true)
         {
             char decodedChar;
@@ -243,23 +247,27 @@ void decoding(ifstream &input)
             else
             {
                 if(decodedChar == 'E')
-                decodedFile << endl;
+                answer.push_back('$'); //used $ for detecting new line
                 else
                 {
                     if(shift == 'U')
                     decodedChar = toupper(decodedChar);
                     
-                    decodedFile << decodedChar;
+                    //decodedFile << decodedChar;
+                    answer.push_back(decodedChar);
                 }
                 shift = 'G';
             }
 
             //Add next slice to the end of string
-            for(int j = 0; j < 6 and !input.eof(); j++)
+            for(int j = 0; j < 6 and index < input.size(); j++)
             {
-                input.get(c);
-                if(input.eof()) break;
+                c = input[index++];
                 slices.push_back(c);
+                // input.get(c);
+                // if(input.eof()) break;
+                // slices.push_back(c);
+
             }
         }
 
@@ -268,16 +276,25 @@ void decoding(ifstream &input)
             char decodedChar;
             hamming(slices,decodedChar,shift);
             // cout << " "<<decodedChar<<" ";
-            if(decodedChar == 'E')
-            decodedFile << endl;
+
+            if(decodedChar == 'U' or decodedChar == 'D' or decodedChar == 'P')
+            {
+                shift = decodedChar;
+            }
             else
             {
-                if(shift == 'U')
-                decodedChar = toupper(decodedChar);
-                
-                decodedFile << decodedChar;
+                if(decodedChar == 'E')
+                answer.push_back('$');            //decodedFile << endl;
+                else
+                {
+                    if(shift == 'U')
+                    decodedChar = toupper(decodedChar);
+                    
+                    answer.push_back(decodedChar);//decodedFile << decodedChar;
+                }
+                shift = 'G';
             }
-            shift = 'G';
         }
     }
+    return answer;
 }
