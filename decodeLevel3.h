@@ -6,10 +6,10 @@ using namespace std;
 void level3(ifstream &decodedFileLevel2) 
 {
     //Level 3
+    ofstream finalFile("Files/OutputLevel3.txt",ios::out | ios::trunc);
+    string word = "";
     while(!decodedFileLevel2.eof())
     {
-        ofstream finalFile("Files/OutputLevel3.txt",ios::out | ios::trunc);
-        string word = "";
         char c;
         decodedFileLevel2.get(c);
         if(decodedFileLevel2.eof()) break;
@@ -29,4 +29,5 @@ void level3(ifstream &decodedFileLevel2)
             finalFile << c;
         }
     }
+    finalFile.close();
 }

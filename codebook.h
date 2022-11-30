@@ -39,7 +39,7 @@ vector<pair<char,string>> shadow = {
 };
 
 unordered_map<char, string> book;
-
+unordered_set<char> punMap; //used for level3
 void setCodebook()
 {
     for(int i = 0; i < chr.size(); i++)
@@ -50,6 +50,8 @@ void setCodebook()
     for(int i = 0; i < pun.size(); i++)
     {
         book[pun[i].first] = pun[i].second;
+        if(pun[i].first != 'E')
+        punMap.insert(pun[i].first);
     }
 
     for(int i = 0; i < shadow.size(); i++)

@@ -179,122 +179,110 @@ char correctError(string slice, string errortype, char shift)
     return decodedChar;
 }
 
-string decoding(string &input, char &shift)
+string decoding(string &input, char &shift, record &obj)
 {
     string answer = "";
 
-   // ofstream decodedFile("DecodedFile.txt",ios::out | ios::trunc);
-    //if(decodedFile.is_open())
+    string slices = "";
+    int k = 10;
+    char c;
+    int index = 0;
+
+    //reading first k slices
+    for(int i = 0; i < 6*k and index < input.size(); i++)
     {
-        //reading first k=10 slices
-        string slices = "";
-        int k = 10;
-        char c;
-        int index = 0;
-        for(int i = 0; i < 6*k and index < input.size(); i++)
+        c = input[index++];
+        slices.push_back(c);
+    }
+
+    while(true)
+    {
+        char decodedChar;
+        //last slice
+        if(slices.size() <= 6)
+            break;     //Break of while
+
+        //Calculate hamming distance of single slices
+        int distance = hamming(slices.substr(0,6), decodedChar, shift);
+        if(distance != 0) //Error slice
+        {
+            //Detect type of error
+            string errortype = errorType(slices,k);
+            string errorSlice;
+            if(errortype == "Insertion")
+            {
+                errorSlice = slices.substr(0,7); //7 characters
+                slices = slices.substr(7);//7th Index
+                obj.insError++;
+            } 
+            else if(errortype == "Deletion")
+            {
+                errorSlice = slices.substr(0,5); //5 characters
+                slices = slices.substr(5); //5th Index
+                obj.delError++;
+            }
+            else //errortype == "Substitution"
+            {
+                errorSlice = slices.substr(0,6); //6 charcters
+                slices = slices.substr(6); //6th Index
+                obj.subError++;
+            }
+
+            //Update decoded character
+            decodedChar = correctError(errorSlice,errortype,shift);
+        }
+
+        //Remove 1st slice from string
+        if(distance == 0)
+        slices = slices.substr(6);
+
+        //Append decoded character to file 
+        if(decodedChar == 'U' or decodedChar == 'D' or decodedChar == 'P')
+        {
+            shift = decodedChar;
+        }
+        else
+        {
+            if(decodedChar == 'E')
+            answer.push_back('$'); //used $ for detecting new line
+            else
+            {
+                if(shift == 'U')
+                decodedChar = toupper(decodedChar);
+                answer.push_back(decodedChar);
+            }
+            shift = 'G';
+        }
+
+        //Add next slice to the end of string
+        for(int j = 0; j < 6 and index < input.size(); j++)
         {
             c = input[index++];
-            //input.get(c);
-            //if(input.eof()) break;
             slices.push_back(c);
         }
-        //cout << slices << " ";
+    }
 
-        //char shift = 'G';
-        while(true)
+    if(slices.size() <= 6 and slices.size() != 0)
+    {
+        char decodedChar;
+        hamming(slices,decodedChar,shift);
+        if(decodedChar == 'U' or decodedChar == 'D' or decodedChar == 'P')
         {
-            char decodedChar;
-            //last slice
-            if(slices.size() <= 6)
-                break;     //Break of while
-
-            //Calculate hamming distance of single slices
-            int distance = hamming(slices.substr(0,6), decodedChar, shift);
-            if(distance != 0) //Error slice
-            {
-                //Detect type of error
-                string errortype = errorType(slices,k);
-                string errorSlice;
-                if(errortype == "Insertion")
-                {
-                    errorSlice = slices.substr(0,7); //7 characters
-                    slices = slices.substr(7);//7th Index
-                } 
-                else if(errortype == "Deletion")
-                {
-                    errorSlice = slices.substr(0,5); //5 characters
-                    slices = slices.substr(5); //5th Index
-                }
-                else //errortype == "Substitution"
-                {
-                    errorSlice = slices.substr(0,6); //6 charcters
-                    slices = slices.substr(6); //6th Index
-                }
-
-                //Update decoded character
-                decodedChar = correctError(errorSlice,errortype,shift);
-            }
-
-            //Remove 1st slice from string
-            if(distance == 0)
-            slices = slices.substr(6);
-
-            //Append decoded character to file 
-            if(decodedChar == 'U' or decodedChar == 'D' or decodedChar == 'P')
-            {
-                shift = decodedChar;
-            }
-            else
-            {
-                if(decodedChar == 'E')
-                answer.push_back('$'); //used $ for detecting new line
-                else
-                {
-                    if(shift == 'U')
-                    decodedChar = toupper(decodedChar);
-                    
-                    //decodedFile << decodedChar;
-                    answer.push_back(decodedChar);
-                }
-                shift = 'G';
-            }
-
-            //Add next slice to the end of string
-            for(int j = 0; j < 6 and index < input.size(); j++)
-            {
-                c = input[index++];
-                slices.push_back(c);
-                // input.get(c);
-                // if(input.eof()) break;
-                // slices.push_back(c);
-
-            }
+            shift = decodedChar;
         }
-
-        if(slices.size() <= 6 and slices.size() != 0)
+        else
         {
-            char decodedChar;
-            hamming(slices,decodedChar,shift);
-            // cout << " "<<decodedChar<<" ";
-
-            if(decodedChar == 'U' or decodedChar == 'D' or decodedChar == 'P')
-            {
-                shift = decodedChar;
-            }
+            if(decodedChar == 'E')
+            answer.push_back('$');            
             else
             {
-                if(decodedChar == 'E')
-                answer.push_back('$');            //decodedFile << endl;
-                else
-                {
-                    if(shift == 'U')
-                    decodedChar = toupper(decodedChar);
-                    
-                    answer.push_back(decodedChar);//decodedFile << decodedChar;
-                }
-                shift = 'G';
+                if(shift == 'U')
+                decodedChar = toupper(decodedChar);
+                answer.push_back(decodedChar);
             }
+            shift = 'G';
         }
     }
+    
     return answer;
 }

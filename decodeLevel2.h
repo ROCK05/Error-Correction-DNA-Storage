@@ -4,14 +4,18 @@
 
 using namespace std;
 
-void level2(ifstream &encodedFile, double errorRate)
+void level2(ifstream &encodedFile, double errorRate, int index)
 {
     if(encodedFile.is_open())
     {
         string line;
         string answer;
         char shift = 'G';
-        ofstream decodedFilelevel2("DecodedFileLevel2.txt",ios::out | ios::trunc);
+        string temp = to_string(index);
+        string path = "Files/DecodedFile" + temp + ".txt";
+        ofstream decodedFilelevel2(path,ios::out | ios::trunc);
+        record totalErrorGenerated;
+        record totalErrorCorrected;
         if(decodedFilelevel2.is_open())
         {
             while(getline(encodedFile,line))
@@ -21,17 +25,22 @@ void level2(ifstream &encodedFile, double errorRate)
                 string reads[numberOfReads];
                 int maxLen = 0, maxFreqShift = 0;
                 unordered_map<char,int> shiftFreq;
+                record perSeqErrorGenerated;
+                record perSeqErrorCorrected;
                 for(int i = 0; i < numberOfReads; i++)
                 {
                     char currShift = shift;
-                    string erroredLine = error(line,errorRate);
-                    reads[i] = decoding(erroredLine,currShift);
-                    
+                    string erroredLine = error(line,errorRate,perSeqErrorGenerated);
+                    reads[i] = decoding(erroredLine,currShift,perSeqErrorCorrected);
                     shiftFreq[currShift]++;                        
                     if(maxLen < reads[i].size())
                     maxLen = reads[i].size();
                 }
+                perSeqErrorGenerated.avg(numberOfReads);
+                perSeqErrorCorrected.avg(numberOfReads);
 
+                totalErrorGenerated = totalErrorGenerated + perSeqErrorGenerated;
+                totalErrorCorrected = totalErrorCorrected + perSeqErrorCorrected;
                 //Making length same of all alignment
                 for(int i = 0; i < numberOfReads; i++)
                 {
@@ -78,9 +87,16 @@ void level2(ifstream &encodedFile, double errorRate)
                         shift = i.first;
                     }
                 }
-
             }
         }
+
+        cout << "-----Present Error-----"<<'\n';
+        totalErrorGenerated.print();
+
+        cout <<"\n-----Corrected Error-----\n";
+        totalErrorCorrected.print();
+
+        //cout << "\nCorrected error: " << 100*totalErrorCorrected.totalError/totalErrorGenerated.totalError<<'%'<<'\n';
         decodedFilelevel2.close();
     }
     else

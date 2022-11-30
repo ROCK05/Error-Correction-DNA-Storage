@@ -1,70 +1,70 @@
 #include <bits/stdc++.h>
-#include "decodeLevel2.h"
-// #include <D:\DNAproject\vcpkg\packages\hunspell_x86-windows\include\hunspell.cxx>
+#include "decodeLevel3.h"
 using namespace std;
 int main()
 {
     setCodebook();
-    ifstream inputFile("D:/DNAproject/tempInput.txt");
+    cout << "Choose option given below \n 1.Run for one time \n 2.Multiple times for same error rate \n 3.For error rate from 0.01 to 0.05 \n Choice of option: ";
+    int choice;
+    cin >> choice;
+    while(choice != 1 and choice != 2 and choice != 3)
+    {
+        cout << "Choose valid option: ";
+        cin >> choice;
+    }
+
+    cout << "\n Runnig...\n";
+    ifstream inputFile("Files/InputFile.txt");
     if(inputFile)
     {
         encoding(inputFile);
     }
     else //error
     {
-        cout << "Error in opening Input file";
+        cout << "Error in opening Input file" << endl;
     }
     inputFile.close();
 
-     ifstream encodedFile("D:/DNAproject/Encodedfile.txt");
-     //error(encodedFile, 0.01);
-     
-     level2(encodedFile, 0.05);
-     encodedFile.close();
-     
-    // ifstream erroredFile("D:/DNAproject/ErroredFile.txt");
-    // decoding(erroredFile);
-    // erroredFile.close();
+    //Delete files if there any
+    for(int i = 1; i <= 10; i++)
+    {
+        string temp = "Files/DecodedFile" + to_string(i) + ".txt";
+        const char* path = temp.c_str();
+        remove(path);
+    }
 
-    // ifstream finalInput("D:/DNAproject/Encodefile.txt");
-    // ifstream finalOutput("D:/DNAproject/EncodedfileTemp.txt");
+    if(choice == 1)
+    {
+        ifstream encodedFile("Files/EncodedFile.txt");
+        cout << "\nResults for error rate 0.02:\n";
+        level2(encodedFile, 0.02,1);
+        encodedFile.close();
+    }
+    else if(choice == 2)
+    {
+        for(int i = 1; i <= 10; i++)
+        {
+            ifstream encodedFile("Files/EncodedFile.txt");
+            cout << "\nResult " << i<< ":\n";
+            level2(encodedFile, 0.02,i);
+            encodedFile.close();
+        }
+    }
+    else
+    {
+        double errorRates[] = {0.01, 0.02, 0.03, 0.04, 0.05};
+        for(int i = 1; i <= 5; i++)
+        {
+            ifstream encodedFile("Files/EncodedFile.txt");
+            cout << "\nResults for error rate " << errorRates[i-1] << "\n";
+            level2(encodedFile, errorRates[i-1], i);
+            cout << "\n\n";
+            encodedFile.close();
+        }
+    }
 
-    // int wrong = 0;
-    // char in,out;
-    // while(!finalInput.eof() and !finalOutput.eof())
-    // {
-    //     finalInput.get(in);
-    //     finalOutput.get(out);
-
-    //     if(finalInput.eof() or finalOutput.eof())
-    //     break;
-    //     if(in != out)
-    //     wrong++;
-    // }
-
-    // while(!finalInput.eof())
-    // {
-    //     finalInput.get(in);
-    //     if(finalInput.eof())
-    //     break;
-    //     wrong++;
-    // }
-
-    // while(!finalOutput.eof())
-    // {
-    //     finalOutput.get(in);
-    //     if(finalOutput.eof())
-    //     break;
-    //     wrong++;
-    // }
-    
-    //cout << "Wrong decoded characters: " << wrong <<endl;
-    // Hunspell obj("D:/DNAproject/index.aff","D:/DNAproject/dectionary.dic");
-    // vector<string> ans;
-    // if(!obj.spell("helo"))
-    // {
-    //     ans = obj.suggest("helo");
-    // }
-    // cout << ans[0];
-    // return 0;
+    // Level3 - Spelling correction
+    // ifstream decodedFileLevel2("Files/DecodedFile1.txt");
+    // level3(decodedFileLevel2);
+    // decodedFileLevel2.close();
 }

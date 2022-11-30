@@ -23,9 +23,7 @@ string getCode(char ch)
 //Function for Encoding text
 void encoding(ifstream &input)
 {
-    ofstream encodedfile("Encodedfile.txt",ios::out | ios::trunc);
-    //ofstream encodedfileTemp("EncodedfileTemp.txt",ios::out | ios::trunc);
-
+    ofstream encodedfile("Files/EncodedFile.txt",ios::out | ios::trunc);
     char c;
     int totalCharInInput = 0;
     if(encodedfile.is_open())
@@ -37,6 +35,11 @@ void encoding(ifstream &input)
             int i;
             for(int i = 0; i < line.size(); i++)
             {
+                if(line[i] < 'A' and line [i] > 'Z' and book.find(line[i]) == book.end())
+                {
+                    std::cout << "'"<<line[i]<<"'" << " can not be encoded"<<endl;
+                    exit(1);
+                }
                 str += getCode(line[i]);
                 if(str.size() >= 180)
                 {
@@ -47,15 +50,10 @@ void encoding(ifstream &input)
                     else
                     str = "";
                 }
-                //encodedfileTemp << getCode(line[i]);
                 totalCharInInput++;
             }
-            // if(str.size() == 180)
-            // {
-            //     encodedfile << str <<endl;
-            //     str = "";
-            // }
-            //Add enter string code if it is not end of file
+            
+            //Add 'ENTER' string code if it is not end of file
             if(!input.eof())
             {
                 if(input.eof())
@@ -74,18 +72,14 @@ void encoding(ifstream &input)
                     encodedfile << endl;
                     str = "";
                 }
-                // encodedfileTemp << book['P'];
-                // encodedfileTemp << book['E'];
             }
         }
 
         if(str.size() != 0)
         {
-        encodedfile << str;
-        str = "";
+            encodedfile << str;
+            str = "";
         }
     }
-
-    //cout << "Total characters in Input: " << totalCharInInput<<endl;
     encodedfile.close();
 }
