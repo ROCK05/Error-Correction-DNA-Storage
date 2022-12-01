@@ -22,6 +22,7 @@ int main()
     else //error
     {
         cout << "Error in opening Input file" << endl;
+        exit(1);
     }
     inputFile.close();
 
@@ -68,4 +69,5 @@ int main()
     // cout << "\n\nRunning...\n";
     // level3(decodedFileLevel2);
     // decodedFileLevel2.close();
+    exit(0);
 }

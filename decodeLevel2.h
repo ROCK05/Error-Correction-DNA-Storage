@@ -102,6 +102,7 @@ void level2(ifstream &encodedFile, double errorRate, int index)
     else
     {
         cout << "Error in opening encoded file"<<endl;
+        exit(1);
     }
     return;
 }
