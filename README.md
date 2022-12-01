@@ -6,6 +6,6 @@ A hierarchical error correction strategy is used to store text data in DNA stora
 Full article: https://link.springer.com/article/10.1007/s12539-021-00476-x
 X. Zan et al., “A Hierarchical Error Correction Strategy for Text DNA Storage,” Interdisciplinary Sciences: Computational Life Sciences, vol. 14, no. 1, pp. 141–150, Aug. 2021, doi: 10.1007/s12539-021-00476-x.
 
-## Clonig the repo:
+## Cloning the repo:
 > git clone https://github.com/ROCK05/Error-Correction-DNA-Storage.git \
 Prefered - latest version of Visual Studio Code having C++ runing environment.
