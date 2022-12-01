@@ -13,7 +13,7 @@ int main()
         cin >> choice;
     }
 
-    cout << "\n Runnig...\n";
+    cout << "\n Running...\n";
     ifstream inputFile("Files/InputFile.txt");
     if(inputFile)
     {
@@ -65,6 +65,7 @@ int main()
 
     // Level3 - Spelling correction
     // ifstream decodedFileLevel2("Files/DecodedFile1.txt");
+    // cout << "\n\nRunning...\n";
     // level3(decodedFileLevel2);
     // decodedFileLevel2.close();
 }
